@@ -71,7 +71,7 @@ https://github.com/bryglab/linedraft/issues
 
 ## Status
 
-Roadmap and implementation notes: [PROJECT.md](PROJECT.md).
+Beta, actively evolving.
 
 ## License
 
