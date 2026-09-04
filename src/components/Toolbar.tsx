@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useStore } from "../store";
-import { CORRIDORS_ENABLED, WAREHOUSES_ENABLED } from "../types";
+import { CORRIDORS_ENABLED, KOFI_USERNAME, WAREHOUSES_ENABLED } from "../types";
 import { useT, useUi } from "../i18n";
 import { downloadProject, readProjectFile, exportSvgToPng } from "../lib/io";
 
@@ -102,6 +102,20 @@ export function Toolbar({ svgRef }: Props) {
       >
         {lang === "en" ? "DE" : "EN"}
       </button>
+      {KOFI_USERNAME && (
+        <>
+          <span className="sep" />
+          <a
+            className="kofi-link"
+            href={`https://ko-fi.com/${KOFI_USERNAME}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={t("support.kofi.title")}
+          >
+            {t("support.kofi")}
+          </a>
+        </>
+      )}
 
       <input
         ref={fileRef}

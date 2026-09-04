@@ -90,6 +90,22 @@ textarea {
   font-weight: 600;
 }
 
+.kofi-link {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.kofi-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .main {
   flex: 1;
   display: flex;

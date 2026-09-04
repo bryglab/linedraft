@@ -1,73 +1,93 @@
-# TF Line Designer
+# LineDraft
 
-Ein schematischer Linien-Planer für **Transport Fever 3** (Release 29.09.2026).
-Gedacht zum Vorplanen kompletter Netze im Sandbox-Modus: Städte & Industrien
-setzen, Personen- und Güterlinien ziehen, beschriften, Ebenen ein-/ausblenden –
-bevor im Spiel gebaut wird.
+A free, schematic (metro-style, not to scale) network line planner for
+sandbox-mode tycoon games. Place cities and industries, draw passenger and
+cargo lines across rail/road/tram/ship/air, label everything, toggle layers —
+plan the whole network before you build a single piece of track.
 
-Kein Server, keine Cloud. Alles lokal, Autospeicherung im Browser (localStorage),
-Im-/Export als JSON, Bild-Export als PNG.
+**Live app:** https://linedraft.bryglab.io
 
-**Sprache:** Englisch / Deutsch, Umschalter oben rechts (EN/DE). Beim ersten
-Start wird die Browsersprache erkannt (Deutsch → DE, sonst EN); die Wahl wird
-gemerkt (`localStorage: tfld:lang`). Strings in `src/i18n.ts`.
+![LineDraft screenshot](public/og-image.png)
 
-## Start
+No server, no cloud, no account. Everything runs client-side in the browser,
+with autosave to `localStorage` and JSON import/export plus PNG export for
+sharing a plan.
+
+## Features
+
+- Pan/zoom SVG canvas with a grid
+- Place, name, move and delete cities and industries
+- Multi-stop lines per mode (rail, road, tram, ship, air), passenger or cargo,
+  freely colorable
+- Automatic parallel-line bundling on shared track segments: rounded corners,
+  white casing between lines, station markers per node (capsule = interchange,
+  bar = single stop), slot ordering chosen so branching lines avoid crossing
+  the rest of the bundle
+- Optional octilinear routing (0°/45°/90°), like a real subway diagram, vs.
+  direct/straight routing
+- Waypoints/detours per line (drag a dashed segment handle) without affecting
+  other lines on the same corridor
+- Manually draggable platforms per line at a station, with reset
+- Distinct line style per mode (solid rail, thin tram, dashed road, dotted
+  ship, dash-dot air); cargo lines get an extra light hatch over their color
+- Industries have a role (producer / consumer / both); a cargo-chain check in
+  the sidebar flags cargo lines whose source doesn't produce or whose
+  destination doesn't consume what's being hauled
+- Auto line naming from the stops/mode pattern, with a manual override
+- Layer toggles (passenger / cargo / per mode / labels) plus a legend
+- Local autosave, JSON import/export (`.tfld.json`), PNG export
+- Bilingual UI, English/German, auto-detected from the browser and
+  remembered (switch top-right)
+
+Some features exist in the codebase but are behind disabled flags in
+`src/types.ts` (corridors/road layer, warehouse nodes, line priority, cargo
+categories) — set the relevant flag to `true` to turn them back on.
+
+## Controls
+
+| Action | How |
+|---|---|
+| Pan | drag empty canvas · **space + drag** (anywhere) · middle/right mouse button · **shift + wheel** (horizontal) |
+| Zoom | mouse wheel / pinch (toward cursor) · **+ / −** keys · buttons bottom-right |
+| Fit to content | ⤢ button or **0** key (also runs automatically on load) |
+| Zoom feels backwards? | **⇅** button bottom-right flips scroll direction (remembered) |
+| Place a city / industry | pick the tool, click the canvas |
+| Move a node | drag it in the "Select" tool |
+| Draw a line | "+ Line", click nodes in order, **Enter** or click on empty space to finish |
+| Edit a line's stops | select the line → "click / append a stop" |
+| Edit properties | click an element → right-hand panel |
+| Move a line's platform | select the line → drag the white stop handle on the map (double-click to reset) |
+| Insert a waypoint / detour | select the line → drag the dashed segment handle (midpoint) onto the map. Affects only that line, isn't a stop. Remove it from the waypoint bar. |
+
+## Tech stack
+
+Vite + React + TypeScript, hand-rolled SVG rendering, Zustand for state. No
+runtime dependency on any game — this is purely a planning aid that produces
+JSON/PNG you keep for reference.
+
+## Getting started
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173 (oder nächster freier Port)
-npm run build    # baut EINE Datei: dist/index.html (alles inline)
+npm run dev      # http://localhost:5173 (or the next free port)
+npm run build    # dist/index.html + dist/assets/*.{js,css}
+npm run preview  # serve the production build locally
 ```
 
-`dist/index.html` ist komplett self-contained (JS + CSS inline, `vite-plugin-singlefile`).
-Läuft **standalone per Doppelklick** (`file://`, offline, kein Server) und genauso
-gehostet – einfach die eine Datei irgendwo hinlegen.
+The production build is a normal static site (hashed JS/CSS assets next to
+`index.html`) — deploy the `dist/` folder to any static host. It needs to be
+served over `http(s)`; opening `dist/index.html` directly via `file://` won't
+work due to browser module-loading restrictions.
 
-## Bedienung
+## Feedback
 
-| Aktion | So |
-|---|---|
-| Schwenken | leere Fläche ziehen · **Leertaste + ziehen** (überall) · mittlere/rechte Maustaste · **Shift + Mausrad** (horizontal) |
-| Zoomen | Mausrad / Pinch (zum Cursor) · Tasten **+ / −** · Buttons unten rechts |
-| Alles einpassen | Button ⤢ oder Taste **0** (auch automatisch beim Laden) |
-| Zoom fühlt sich falschherum an? | Button **⇅** unten rechts kehrt die Scroll-Richtung um (wird gemerkt) |
-| Stadt / Industrie setzen | Werkzeug wählen, auf Fläche klicken |
-| Knoten verschieben | im Werkzeug „Auswahl" ziehen |
-| Linie zeichnen | „+ Linie", dann Knoten nacheinander anklicken, **Enter** oder Leerklick beendet |
-| Halte einer Linie ändern | Linie wählen → „Halte anklicken / anhängen" |
-| Eigenschaften bearbeiten | Element anklicken → rechte Leiste |
-| Bahnsteig einer Linie verschieben | Linie wählen → weißen Halte-Ziehpunkt im Plan ziehen (Doppelklick = zurück) |
-| Wegpunkt / Umleitung einfügen | Linie wählen → gestrichelten Segment-Ziehpunkt (Mitte) ins Plan ziehen. Betrifft nur diese Linie, ist kein Halt. Entfernen über die Wegpunkt-Leiste. |
-
-Industrien haben eine Rolle (Produzent / Verbraucher / Beides). Die
-**Güterketten**-Prüfung in der Seitenleiste zeigt pro Güterlinie, ob Start
-liefert und Ziel abnimmt. Linien lassen sich per „Auto"-Knopf nach TF3-Muster
-benennen.
-
-Jeder Verkehrsmodus hat einen eigenen Linienstil: Schiene = durchgezogen,
-Tram = dünn durchgezogen, Straße/Bus = gestrichelt, Schiff = gepunktet,
-Flug = Strich-Punkt. Güterlinien bekommen zusätzlich eine helle Strichelung
-über der Farbe.
-
-Über Feature-Flags in `src/types.ts` sind derzeit deaktiviert: Trassen-/Straßen-
-Ebene, Lager-Knoten, Linien-Priorität, Cargo-Kategorien. Der Code bleibt jeweils
-erhalten – Flag auf `true` = wieder da.
-
-Linien, die denselben Abschnitt benutzen, werden automatisch in gleichmäßige
-parallele Spuren versetzt (Liniennetzplan-Look): abgerundete Ecken, weißes Casing
-zwischen den Linien, Stations-Marker pro Knoten (Kapsel = Umstieg, Strich = ein
-einzelner Halt). Die Slot-Reihenfolge im Bündel wird so gewählt, dass abzweigende
-Linien die anderen möglichst nicht kreuzen.
-
-**Linienführung** (Seitenleiste): *Direkt* = Luftlinie, *Oktilinear* = alles auf
-0 / 45 / 90° gebogen wie in echten U-Bahn-Plänen.
-
-## Stack
-
-Vite + React + TypeScript, SVG-Zeichenfläche, Zustand für State. Keine Runtime-
-Abhängigkeit zum Spiel – TF3-Savegames sind nicht extern beschreibbar.
+This is a solo side project and still beta. Bug reports and feature requests:
+https://github.com/bryglab/linedraft/issues
 
 ## Status
 
-Phase 1 (MVP). Roadmap siehe [PROJECT.md](PROJECT.md).
+Roadmap and implementation notes: [PROJECT.md](PROJECT.md).
+
+## License
+
+[MIT](LICENSE)

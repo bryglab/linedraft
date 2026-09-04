@@ -65,6 +65,10 @@ export const WAREHOUSES_ENABLED = false;
 export const PRIORITY_ENABLED = false;
 export const CARGO_CATEGORY_ENABLED = false;
 
+// Ko-fi-Support-Link in der Toolbar. Username eintragen zum Aktivieren,
+// auf "" setzen blendet den Link aus. Reiner Outbound-Link, kein Script/Tracker.
+export const KOFI_USERNAME = "bryglab";
+
 export type CorridorKind = "road" | "rail" | "tram";
 
 /** A free-drawn piece of physical infrastructure, independent of lines. */
