@@ -1,0 +1,26 @@
+{
+  "name": "tf-line-designer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Metro-style line planner for Transport Fever 3 sandbox mode",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "nanoid": "^5.0.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}

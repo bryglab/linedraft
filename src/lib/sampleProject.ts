@@ -1,0 +1,122 @@
+import type { Project } from "../types";
+import { useUi, type Lang } from "../i18n";
+
+const NAMES: Record<Lang, Record<string, string>> = {
+  en: {
+    net: "Example network",
+    c1: "Newport",
+    c2: "Harborhill",
+    c3: "Woodchurch",
+    c4: "Easton",
+    i1: "Coal mine",
+    i2: "Steel works",
+    l1: "IC 1  Newport – Easton",
+    l2: "Bus 12  Newport – Woodchurch",
+    l4: "S1  Newport – Harborhill – Easton",
+    l5: "RE 7  Newport – Easton",
+    l3: "Freight  Coal → Steel works",
+  },
+  de: {
+    net: "Beispielnetz",
+    c1: "Neustadt",
+    c2: "Hafenberg",
+    c3: "Waldkirch",
+    c4: "Ostheim",
+    i1: "Kohlemine",
+    i2: "Stahlwerk",
+    l1: "IC 1  Neustadt – Ostheim",
+    l2: "Bus 12  Neustadt – Waldkirch",
+    l4: "S1  Neustadt – Hafenberg – Ostheim",
+    l5: "RE 7  Neustadt – Ostheim",
+    l3: "Güter  Kohle → Stahlwerk",
+  },
+};
+
+export function sampleProject(): Project {
+  const n = NAMES[useUi.getState().lang] ?? NAMES.en;
+  return {
+    version: 1,
+    name: n.net,
+    routing: "octilinear",
+    autoName: false,
+    layers: {
+      passenger: true,
+      cargo: true,
+      rail: true,
+      road: true,
+      tram: true,
+      ship: true,
+      air: true,
+      labels: true,
+      corridors: true,
+    },
+    corridors: [],
+    nodes: [
+      { id: "c1", kind: "city", name: n.c1, x: 240, y: 200 },
+      { id: "c2", kind: "city", name: n.c2, x: 560, y: 160 },
+      { id: "c3", kind: "city", name: n.c3, x: 420, y: 420 },
+      { id: "c4", kind: "city", name: n.c4, x: 780, y: 340 },
+      {
+        id: "i1",
+        kind: "industry",
+        name: n.i1,
+        x: 180,
+        y: 440,
+        cargoCategory: "bulk",
+        role: "source",
+      },
+      {
+        id: "i2",
+        kind: "industry",
+        name: n.i2,
+        x: 620,
+        y: 480,
+        cargoCategory: "bulk",
+        role: "sink",
+      },
+    ],
+    lines: [
+      {
+        id: "l1",
+        name: n.l1,
+        mode: "rail",
+        kind: "passenger",
+        color: "#4363d8",
+        stops: ["c1", "c2", "c4"],
+      },
+      {
+        id: "l2",
+        name: n.l2,
+        mode: "road",
+        kind: "passenger",
+        color: "#f58231",
+        stops: ["c1", "c3"],
+      },
+      {
+        id: "l4",
+        name: n.l4,
+        mode: "rail",
+        kind: "passenger",
+        color: "#3cb44b",
+        stops: ["c1", "c2", "c4"],
+      },
+      {
+        id: "l5",
+        name: n.l5,
+        mode: "rail",
+        kind: "passenger",
+        color: "#911eb4",
+        stops: ["c1", "c2", "c4"],
+      },
+      {
+        id: "l3",
+        name: n.l3,
+        mode: "rail",
+        kind: "cargo",
+        color: "#9a6324",
+        cargoCategory: "bulk",
+        stops: ["i1", "i2"],
+      },
+    ],
+  };
+}
