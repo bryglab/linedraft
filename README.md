@@ -59,21 +59,6 @@ categories) — set the relevant flag to `true` to turn them back on.
 | Move a line's platform | select the line → drag the white stop handle on the map (double-click to reset) |
 | Insert a waypoint / detour | select the line → drag the dashed segment handle (midpoint) onto the map. Affects only that line, isn't a stop. Remove it from the waypoint bar. |
 
-## Tech stack
-
-Vite + React + TypeScript, hand-rolled SVG rendering, Zustand for state. No
-runtime dependency on any game — this is purely a planning aid that produces
-JSON/PNG you keep for reference.
-
-## Getting started
-
-```bash
-npm install
-npm run dev      # http://localhost:5173 (or the next free port)
-npm run build    # dist/index.html + dist/assets/*.{js,css}
-npm run preview  # serve the production build locally
-```
-
 The production build is a normal static site (hashed JS/CSS assets next to
 `index.html`) — deploy the `dist/` folder to any static host. It needs to be
 served over `http(s)`; opening `dist/index.html` directly via `file://` won't
